@@ -37,7 +37,7 @@ library
   exposed-modules:
     Network.HTTP.Client.WebSockets
   build-depends:
-      base >= 4.9 && < 5
+      base >= 4.11 && < 5
     , utf8-string
     , bytestring
     , network-uri >= 2.6
