@@ -16,7 +16,7 @@
 --   >>>
 --   >>> import Network.HTTP.Client (Manager, newManager, defaultManagerSettings)
 --   >>> import qualified Network.WebSockets as WS
---   >>> import Network.HTTP.Client.WebSockets as HCWS
+--   >>> import qualified Network.HTTP.Client.WebSockets as HCWS
 --   >>> import Network.URI.Static
 --   >>> import Data.ByteString (ByteString)
 --   >>>
@@ -30,7 +30,7 @@
 --           echoUri = [uri|ws://echo.websocket.org|]
 --   :}
 --
---   >>> -- this Manager does not support TLS, so can't use the wss scheme above
+--   >>> -- this Manager does not support TLS, so we can't use the wss scheme above
 --   >>> newManager defaultManagerSettings >>= runEchoExample
 --   "hello there"
 module Network.HTTP.Client.WebSockets
