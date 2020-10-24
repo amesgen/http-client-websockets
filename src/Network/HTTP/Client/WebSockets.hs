@@ -77,7 +77,7 @@ runClientWith mgr uri connOpts headers app = do
     "wss:" -> pure "https:"
     s -> fail $ "invalid WebSockets scheme: " <> s
   req <- HTTP.requestFromURI uri {uriScheme = httpScheme}
-  runClientWithRequest mgr (req { HTTP.requestHeaders = headers }) connOpts app
+  runClientWithRequest mgr (req {HTTP.requestHeaders = headers}) connOpts app
 
 runClientWithRequest ::
   -- | 'HTTP.Manager' to use to establish the connection
