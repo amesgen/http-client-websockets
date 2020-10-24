@@ -36,6 +36,7 @@
 module Network.HTTP.Client.WebSockets
   ( runClient,
     runClientWith,
+    runClientWithRequest,
   )
 where
 
@@ -76,6 +77,19 @@ runClientWith mgr uri connOpts headers app = do
     "wss:" -> pure "https:"
     s -> fail $ "invalid WebSockets scheme: " <> s
   req <- HTTP.requestFromURI uri {uriScheme = httpScheme}
+  runClientWithRequest mgr (req { HTTP.requestHeaders = headers }) connOpts app
+
+runClientWithRequest ::
+  -- | 'HTTP.Manager' to use to establish the connection
+  HTTP.Manager ->
+  -- | 'HTTP.Request' to use to open the connection, content will be ignored.
+  HTTP.Request ->
+  -- | Options
+  WS.ConnectionOptions ->
+  -- | Client application
+  WS.ClientApp a ->
+  IO a
+runClientWithRequest mgr req connOpts app = do
   HTTP.withConnection req mgr $ \conn -> do
     let read = do
           bs <- HTTP.connectionRead conn
@@ -89,5 +103,5 @@ runClientWith mgr uri connOpts headers app = do
       (UTF8.toString $ HTTP.host req)
       (UTF8.toString $ HTTP.path req <> HTTP.queryString req)
       connOpts
-      headers
+      (HTTP.requestHeaders req)
       app
