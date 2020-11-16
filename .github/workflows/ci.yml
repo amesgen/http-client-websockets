@@ -32,11 +32,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Check formatting
-        run: |
-          ORMOLU=$(mktemp -t)
-          wget -O $ORMOLU https://github.com/tweag/ormolu/releases/download/0.1.3.0/ormolu-Linux
-          chmod +x $ORMOLU
-          $ORMOLU -o-X{TypeApplications,PatternSynonyms,BangPatterns} -i $(find src test doctest -name '*.hs' -type f)
-          git status --porcelain
-          [[ $(git status --porcelain | wc -l) -eq 0 ]]
+      - uses: mrkkrp/ormolu-action@v1
+        with:
+          extra-args: -o-XTypeApplications -o-XPatternSynonyms -o-XBangPatterns
