@@ -20,13 +20,14 @@ jobs:
           - 8.10.2
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-haskell@v1
+      - uses: haskell/actions/setup@v1
         with:
           ghc-version: ${{ matrix.ghc }}
           cabal-version: 3.2.0.0
       - run: cabal build
       - run: cabal test --test-show-details=direct
       - run: cabal haddock
+      - run: cabal check
       - run: cabal sdist
   ormolu:
     runs-on: ubuntu-latest
