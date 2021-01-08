@@ -14,7 +14,7 @@
 --   >>> :set -XOverloadedStrings
 --   >>> :set -XQuasiQuotes
 --   >>>
---   >>> import Network.HTTP.Client (Manager, newManager, defaultManagerSettings)
+--   >>> import Network.HTTP.Client (Manager, defaultManagerSettings)
 --   >>> import qualified Network.WebSockets as WS
 --   >>> import qualified Network.HTTP.Client.WebSockets as HCWS
 --   >>> import Network.URI.Static
@@ -27,11 +27,11 @@
 --           msg <- WS.receiveData conn
 --           pure (msg :: ByteString)
 --         where
---           echoUri = [uri|ws://echo.websocket.org|]
+--           echoUri = [uri|wss://echo.websocket.org|]
 --   :}
 --
---   >>> -- this Manager does not support TLS, so we can't use the wss scheme above
---   >>> newManager defaultManagerSettings >>= runEchoExample
+--   >>> import Network.HTTP.Client.TLS (newTlsManager)
+--   >>> newTlsManager >>= runEchoExample
 --   "hello there"
 module Network.HTTP.Client.WebSockets
   ( runClient,

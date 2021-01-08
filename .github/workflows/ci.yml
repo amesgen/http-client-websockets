@@ -17,18 +17,34 @@ jobs:
         ghc:
           - 8.6.5
           - 8.8.4
-          - 8.10.2
+          - 8.10.3
     steps:
       - uses: actions/checkout@v2
       - uses: haskell/actions/setup@v1
         with:
           ghc-version: ${{ matrix.ghc }}
           cabal-version: 3.2.0.0
-      - run: cabal build
-      - run: cabal test --test-show-details=direct
-      - run: cabal haddock
+      - name: Setup cabal-docspec
+        run: |
+          CABAL_DIR=~/.cabal/bin
+          echo "$CABAL_DIR" >> $GITHUB_PATH
+          DOCSPEC="$CABAL_DIR/cabal-docspec"
+          mkdir -p "$CABAL_DIR"
+          curl -sL https://github.com/phadej/cabal-extras/releases/download/cabal-docspec-$CABAL_DOCSPEC_VERSION/cabal-docspec-$CABAL_DOCSPEC_VERSION.xz | xz -d > "$DOCSPEC"
+          chmod +x "$DOCSPEC"
+          $DOCSPEC --version
+        env:
+          CABAL_DOCSPEC_VERSION: "0.0.0.20201230.1"
+
+      - name: Build dependencies
+        run: cabal build --only-dependencies --enable-tests
+      - name: Build
+        run: cabal build
+      - name: Run tests
+        run: cabal test --test-show-details=direct
+      - name: cabal-docspec
+        run: cabal-docspec --timeout 20 --extra-package=http-client-tls
       - run: cabal check
-      - run: cabal sdist
   ormolu:
     runs-on: ubuntu-latest
     steps:
