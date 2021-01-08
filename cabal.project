@@ -1,4 +1,1 @@
 packages: .
-
--- see https://github.com/sol/doctest/issues/245
-write-ghc-environment-files: always
