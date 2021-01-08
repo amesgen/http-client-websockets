@@ -16,6 +16,12 @@ jobs:
       - run: cabal check
       - run: cabal sdist
       - run: cabal haddock --haddock-for-hackage --enable-documentation
+      - uses: actions/upload-artifact@v2
+        with:
+          name: build-artifacts
+          path: |
+            dist-newstyle/sdist/*.tar.gz
+            dist-newstyle/*.tar.gz
       - uses: haskell-actions/hackage-publish@v1.1
         with:
           hackageToken: ${{ secrets.HACKAGE_AUTH_TOKEN }}

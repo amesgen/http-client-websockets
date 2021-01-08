@@ -32,9 +32,9 @@ jobs:
           mkdir -p "$CABAL_DIR"
           curl -sL https://github.com/phadej/cabal-extras/releases/download/cabal-docspec-$CABAL_DOCSPEC_VERSION/cabal-docspec-$CABAL_DOCSPEC_VERSION.xz | xz -d > "$DOCSPEC"
           chmod +x "$DOCSPEC"
-          $DOCSPEC --version
+          "$DOCSPEC" --version
         env:
-          CABAL_DOCSPEC_VERSION: "0.0.0.20201230.1"
+          CABAL_DOCSPEC_VERSION: "0.0.0.20210108"
 
       - name: Build dependencies
         run: cabal build --only-dependencies --enable-tests
