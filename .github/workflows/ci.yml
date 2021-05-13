@@ -17,13 +17,14 @@ jobs:
         ghc:
           - 8.6.5
           - 8.8.4
-          - 8.10.3
+          - 8.10.4
+          - 9.0.1
     steps:
       - uses: actions/checkout@v2
       - uses: haskell/actions/setup@v1
         with:
           ghc-version: ${{ matrix.ghc }}
-          cabal-version: 3.2.0.0
+          cabal-version: '3.4'
       - name: Setup cabal-docspec
         run: |
           CABAL_DIR=~/.cabal/bin
@@ -34,7 +35,7 @@ jobs:
           chmod +x "$DOCSPEC"
           "$DOCSPEC" --version
         env:
-          CABAL_DOCSPEC_VERSION: "0.0.0.20210108"
+          CABAL_DOCSPEC_VERSION: "0.0.0.20210111"
 
       - name: Build dependencies
         run: cabal build --only-dependencies --enable-tests
@@ -43,7 +44,7 @@ jobs:
       - name: Run tests
         run: cabal test --test-show-details=direct
       - name: cabal-docspec
-        run: cabal-docspec --timeout 20 --extra-package=http-client-tls
+        run: ./docspec.sh
       - run: cabal check
   ormolu:
     runs-on: ubuntu-latest
