@@ -1,8 +1,12 @@
 # Revision history for http-client-websockets
 
+## 0.1.1.2 -- 2021-05-29
+
+* Remove dependency on utf8-string.
+
 ## 0.1.1.1 -- 2021-01-08
 
-* Documentation updates
+* Documentation updates.
 
 ## 0.1.1.0 -- 2020-10-24
 
