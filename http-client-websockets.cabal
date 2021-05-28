@@ -38,8 +38,8 @@ library
     Network.HTTP.Client.WebSockets
   build-depends:
       base >= 4.11 && < 5
-    , utf8-string
     , bytestring
+    , text
     , network-uri >= 2.6
     , http-client >= 0.6
     , websockets >= 0.12

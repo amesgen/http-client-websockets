@@ -40,9 +40,11 @@ module Network.HTTP.Client.WebSockets
   )
 where
 
-import qualified Codec.Binary.UTF8.Generic as UTF8
+import Control.Exception (throwIO)
 import qualified Data.ByteString as B
 import qualified Data.ByteString.Lazy as LB
+import qualified Data.Text as T
+import qualified Data.Text.Encoding as T
 import qualified Network.HTTP.Client as HTTP
 import qualified Network.HTTP.Client.Internal as HTTP
 import Network.URI (URI (..))
@@ -91,6 +93,8 @@ runClientWithRequest ::
   IO a
 runClientWithRequest mgr req connOpts app = do
   HTTP.withConnection req mgr $ \conn -> do
+    host <- toStringUtf8 $ HTTP.host req
+    path <- toStringUtf8 $ HTTP.path req <> HTTP.queryString req
     let read = do
           bs <- HTTP.connectionRead conn
           pure $ if B.null bs then Nothing else Just bs
@@ -98,10 +102,6 @@ runClientWithRequest mgr req connOpts app = do
           Nothing -> HTTP.connectionClose conn
           Just bs -> HTTP.connectionWrite conn $ LB.toStrict bs
     stream <- WS.makeStream read write
-    WS.runClientWithStream
-      stream
-      (UTF8.toString $ HTTP.host req)
-      (UTF8.toString $ HTTP.path req <> HTTP.queryString req)
-      connOpts
-      (HTTP.requestHeaders req)
-      app
+    WS.runClientWithStream stream host path connOpts (HTTP.requestHeaders req) app
+  where
+    toStringUtf8 = fmap T.unpack . either throwIO pure . T.decodeUtf8'
