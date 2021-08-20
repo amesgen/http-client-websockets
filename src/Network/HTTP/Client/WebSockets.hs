@@ -29,10 +29,6 @@
 --         where
 --           echoUri = [uri|wss://echo.websocket.org|]
 --   :}
---
---   >>> import Network.HTTP.Client.TLS (newTlsManager)
---   >>> newTlsManager >>= runEchoExample
---   "hello there"
 module Network.HTTP.Client.WebSockets
   ( runClient,
     runClientWith,
