@@ -8,6 +8,13 @@ on:
       - opened
       - synchronize
 jobs:
+  ormolu:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: mrkkrp/ormolu-action@v2
+        with:
+          extra-args: -o-XTypeApplications
   ci:
     name: Run tests
     runs-on: ubuntu-latest
@@ -22,6 +29,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: haskell/actions/setup@v1
+        id: setup-haskell
         with:
           ghc-version: ${{ matrix.ghc }}
       - name: Setup cabal-docspec
@@ -36,19 +44,23 @@ jobs:
         env:
           CABAL_DOCSPEC_VERSION: "0.0.0.20210111"
 
+      - name: Configure
+        run: cabal configure --enable-tests
+      - name: Freeze build
+        run: cabal freeze
+      - uses: actions/cache@v2
+        with:
+          path: ${{ steps.setup-haskell.outputs.cabal-store }}
+          key: cabal-${{ matrix.ghc }}-${{ hashFiles('cabal.project.freeze') }}
+          restore-keys: |
+            cabal-${{ matrix.ghc }}
+
       - name: Build dependencies
-        run: cabal build --only-dependencies --enable-tests
+        run: cabal build --only-dependencies
       - name: Build
         run: cabal build
       - name: Run tests
         run: cabal test --test-show-details=direct
-      - name: cabal-docspec
+      - name: Run docspec
         run: ./docspec.sh
       - run: cabal check
-  ormolu:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: mrkkrp/ormolu-action@v2
-        with:
-          extra-args: -o-XTypeApplications -o-XPatternSynonyms -o-XBangPatterns
