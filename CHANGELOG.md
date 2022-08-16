@@ -1,5 +1,10 @@
 # Revision history for http-client-websockets
 
+## 0.1.1.3 -- 2022-08-16
+
+* Remove test dependency on http-client-websockets.
+* New echo server in Haddocks.
+
 ## 0.1.1.2 -- 2021-05-29
 
 * Remove dependency on utf8-string.
