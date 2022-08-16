@@ -14,7 +14,7 @@
 --   >>> :set -XOverloadedStrings
 --   >>> :set -XQuasiQuotes
 --   >>>
---   >>> import Network.HTTP.Client (Manager, defaultManagerSettings)
+--   >>> import Network.HTTP.Client (Manager, defaultManagerSettings, newManager)
 --   >>> import qualified Network.WebSockets as WS
 --   >>> import qualified Network.HTTP.Client.WebSockets as HCWS
 --   >>> import Network.URI.Static
@@ -24,11 +24,15 @@
 --       runEchoExample :: Manager -> IO ByteString
 --       runEchoExample mgr = HCWS.runClient mgr echoUri $ \conn -> do
 --           WS.sendTextData conn ("hello there" :: ByteString)
+--           _ <- WS.receiveDataMessage conn -- skip first msg
 --           msg <- WS.receiveData conn
 --           pure (msg :: ByteString)
 --         where
---           echoUri = [uri|wss://echo.websocket.org|]
+--           echoUri = [uri|ws://echo.websocket.events|] -- no TLS in this example
 --   :}
+--
+--   >>> runEchoExample =<< newManager defaultManagerSettings
+--   "hello there"
 module Network.HTTP.Client.WebSockets
   ( runClient,
     runClientWith,

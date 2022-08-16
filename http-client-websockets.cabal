@@ -55,7 +55,7 @@ test-suite hspec
     , bytestring
     , hspec >= 2.5
     , network-uri
-    , http-client-tls
+    , http-client
     , websockets
     , async ^>= 2.2
     , http-client-websockets

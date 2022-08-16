@@ -1,1 +1,1 @@
-cabal-docspec --timeout 20 --extra-package=http-client-tls "$@"
+cabal-docspec --timeout 20 "$@"
