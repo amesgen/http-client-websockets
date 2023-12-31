@@ -43,6 +43,7 @@ library
     , network-uri >= 2.6
     , http-client >= 0.6
     , websockets >= 0.12
+  x-docspec-options: --timeout 20
 
 test-suite hspec
   import: commons
