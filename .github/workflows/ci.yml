@@ -26,11 +26,13 @@ jobs:
           - 9.0.2
           - 9.2.8
           - 9.4.8
-          - 9.6.3
-          - 9.8.1
+          - 9.6.6
+          - 9.8.4
+          - 9.10.1
+          - 9.12.1
     steps:
       - uses: actions/checkout@v4
-      - uses: haskell/actions/setup@v2
+      - uses: haskell-actions/setup@v2
         id: setup-haskell
         with:
           ghc-version: ${{ matrix.ghc }}
@@ -44,7 +46,7 @@ jobs:
           chmod +x "$DOCSPEC"
           "$DOCSPEC" --version
         env:
-          CABAL_DOCSPEC_VERSION: "0.0.0.20231219"
+          CABAL_DOCSPEC_VERSION: "0.0.0.20240703"
 
       - name: Configure
         run: cabal configure --enable-tests
